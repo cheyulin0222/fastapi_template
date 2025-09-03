@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import router as api_router
 from app.core.database import Base, engine
@@ -13,14 +13,14 @@ Base.metadata.create_all(bind=engine)
 
 # 建立應用程式實例
 app = FastAPI(
-    title="FastAPI Template",
-    description="A simple API server with auth and user management",
-    version="1.0.0"
+    title=settings.APP_TITLE,
+    description=settings.APP_DESCRIPTION,
+    version=settings.APP_VERSION,
 )
 
 # 註冊 CORS 中間件
 app.add_middleware(
-    CORSMiddleware, # type: ignore
+    CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
     allow_methods=settings.CORS_METHODS,
     allow_headers=settings.CORS_HEADERS,
@@ -42,6 +42,6 @@ if __name__ == "__main__":
         host=settings.APP_HOST,
         port=settings.APP_PORT,
         reload=settings.APP_RELOAD,
-        workers=settings.UVICORN_WORKERS,
-        timeout_keep_alive=settings.UVICORN_TIMEOUT_KEEP_ALIVE
+        workers=settings.SERVER_UVICORN_WORKERS,
+        timeout_keep_alive=settings.SERVER_UVICORN_TIMEOUT_KEEP_ALIVE_SECONDS
     )

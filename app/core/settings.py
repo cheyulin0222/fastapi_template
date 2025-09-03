@@ -7,19 +7,18 @@ class Settings(BaseSettings):
     APP_TITLE: str
     APP_DESCRIPTION: str
     APP_VERSION: str
-    APP_PREFIX: str
     # 伺服器設定
     SERVER_HOST: str
     SERVER_PORT: int
     SERVER_RELOAD: bool
     SERVER_UVICORN_WORKERS: int
-    SERVER_UVICORN_TIMEOUT_KEEP_ALIVE: int
+    SERVER_UVICORN_TIMEOUT_KEEP_ALIVE_SECONDS: int
     # CORS 設定
     CORS_ORIGINS: List[str]
     CORS_METHODS: List[str]
     CORS_HEADERS: List[str]
     CORS_ALLOW_CREDENTIALS: bool
-    CORS_MAX_AGE: int
+    CORS_MAX_AGE_SECONDS: int
 
     DATABASE_URL: str
     SECRET_KEY: str
