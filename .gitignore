@@ -1,0 +1,18 @@
+# 虛擬環境
+.venv/
+venv/
+env/
+
+# 執行時產生的檔案
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.tox/
+.coverage
+
+# IDE 相關檔案 (PyCharm)
+.idea/
+
+# 設定檔，不應公開
+.env
