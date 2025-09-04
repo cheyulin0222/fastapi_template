@@ -1,27 +1,25 @@
 from sqlalchemy.orm import Session
-
 from app.core.security import get_password_hash, verify_password
 from app.repository import user as user_repo
+from app.schemas.auth import RegisterRequest, LoginRequest
 
 
-from app.schemas.user import UserCreate, UserLogin
-
-
-def register_new_user(db: Session, user: UserCreate):
-    db_user = user_repo.get_user_by_username(db, username=user.username)
+def create_user(db: Session, request: RegisterRequest):
+    db_user = user_repo.get_user_by_username(db, username=request.username)
     if db_user:
         return None
 
-    hashed_password = get_password_hash(user.password)
+    hashed_password = get_password_hash(request.password)
     return user_repo.create_user(
         db,
-        username=user.username,
+        username=request.username,
         hashed_password=hashed_password,
-        full_name=user.full_name
+        full_name=request.full_name
     )
 
-def authenticate_user(db: Session, user_login: UserLogin):
-    db_user = user_repo.get_user_by_username(db, username=user_login.username)
-    if not db_user or not verify_password(user_login.password, db_user.hashed_password):
+def authenticate_user(db: Session, request: LoginRequest):
+    db_user = user_repo.get_user_by_username(db, username=request.username)
+    if not db_user or not verify_password(request.password, db_user.hashed_password):
         return None
     return db_user
+

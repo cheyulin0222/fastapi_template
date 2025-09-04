@@ -20,14 +20,13 @@ app = FastAPI(
 
 # 註冊 CORS 中間件
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware, # type: ignore
     allow_origins=settings.CORS_ORIGINS,
     allow_methods=settings.CORS_METHODS,
     allow_headers=settings.CORS_HEADERS,
     allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
     max_age=settings.CORS_MAX_AGE
 )
-
 
 # 註冊路由
 app.include_router(api_router)
