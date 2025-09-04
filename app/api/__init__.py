@@ -11,19 +11,29 @@ def register_routers():
     # 模組 (Module)：通常是一個單一的 .py 檔案。它沒有 submodule_search_locations 這個屬性。
     # 套件 (Package)：一個包含 __init__.py 檔案的目錄，可以包含多個子模組或子套件。
     # 它有 submodule_search_locations 這個屬性
-    api_package = importlib.util.find_spec(__name__)
-    if not api_package or not api_package.submodule_search_locations:
-        return
+    # 獲取當前套件 (app.api) 的路徑。
+    # __path__ 是一個列表，包含了套件所有子模組的路徑，這是 pkgutil.walk_packages 所需要的。
+    # 如果這個檔案是 __init__.py，則 __name__ 代表套件名稱，而 __path__ 則代表套件路徑。
+    # 使用 `globals()` 獲取當前模組的 __path__ 屬性
+    package_path = globals()['__path__']
 
-    # 迭代 app.api 目錄下的所有模組
-    # importer：一個載入器（loader）物件，負責載入模組。你通常不需要直接使用它，但它提供了像 find_spec() 這樣的函式。
-    # modname : 模組或子套件的名稱。在你的專案中，它可能是 'auth' 或 'user'
-    # ispkg : true : 是一個子套件 (有 __init__.py)，false : 是一個模組 (.py)
-    for importer, modname, ispkg in pkgutil.walk_packages(api_package.__path__):
+    # 使用 pkgutil.walk_packages 迭代 app.api 目錄下的所有模組
+    # importer: 模組的載入器物件
+    # modname: 模組或子套件的名稱
+    # ispkg: true : 是一個子套件 (有 __init__.py)，false : 是一個模組 (.py)
+    for importer, modname, ispkg in pkgutil.walk_packages(package_path):
+        # 忽略子套件，只處理 .py 模組
         if ispkg:
             continue
 
-        module = importer.find_module(modname).load_module(modname)
+        # 使用 importlib.import_module 載入模組，這是更現代的方式
+        # 這裡需要完整的模組路徑，例如 'app.api.users'
+        full_module_name = f"{__name__}.{modname}"
+        try:
+            module = importlib.import_module(full_module_name)
+        except ImportError as e:
+            print(f"無法載入模組 {full_module_name}: {e}")
+            continue
 
         # 遍歷模組中的所有屬性
         for attr_name in dir(module):

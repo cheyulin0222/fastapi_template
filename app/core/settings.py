@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic.v1 import BaseSettings, validator
+from pydantic.v1 import BaseSettings
 
 class Settings(BaseSettings):
     # 專案設定
@@ -24,11 +24,12 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
-    @validator('CORS_ORIGINS', 'CORS_METHODS', 'CORS_HEADERS', pre=True)
-    def split_str_to_list(self, v):
-        if isinstance(v, str):
-            return [s.strip() for s in v.split(',') if s.strip()]
-        return v
+    # @classmethod
+    # @validator('CORS_ORIGINS', 'CORS_METHODS', 'CORS_HEADERS', pre=True)
+    # def split_str_to_list(cls, v):
+    #     if isinstance(v, str):
+    #         return [s.strip() for s in v.split(',') if s.strip()]
+    #     return v
 
     # 作為 Pydantic 的配置資訊
     class Config:

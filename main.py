@@ -25,7 +25,7 @@ app.add_middleware(
     allow_methods=settings.CORS_METHODS,
     allow_headers=settings.CORS_HEADERS,
     allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
-    max_age=settings.CORS_MAX_AGE
+    max_age=settings.CORS_MAX_AGE_SECONDS
 )
 
 # 註冊路由
@@ -38,9 +38,9 @@ app.add_exception_handler(HTTPException, http_exception_handler) # type: ignore
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
-        host=settings.APP_HOST,
-        port=settings.APP_PORT,
-        reload=settings.APP_RELOAD,
+        host=settings.SERVER_HOST,
+        port=settings.SERVER_PORT,
+        reload=settings.SERVER_RELOAD,
         workers=settings.SERVER_UVICORN_WORKERS,
         timeout_keep_alive=settings.SERVER_UVICORN_TIMEOUT_KEEP_ALIVE_SECONDS
     )
